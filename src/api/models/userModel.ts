@@ -1,12 +1,11 @@
-// TODO: mongoose schema for user
+//mongoose schema for user
 import mongoose from 'mongoose';
 import {User} from '../../types/DBTypes';
 
-const userSchema = new mongoose.Schema<User>({
+const userSchema = new mongoose.Schema({
   user_name: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
@@ -14,8 +13,8 @@ const userSchema = new mongoose.Schema<User>({
     unique: true,
   },
   role: {
-    type: String,
     enum: ['user', 'admin'],
+    type: String,
     required: true,
   },
   password: {
@@ -24,6 +23,6 @@ const userSchema = new mongoose.Schema<User>({
   },
 });
 
-const UserModel = mongoose.model<User>('User', userSchema);
+const userModel = mongoose.model<User>('User', userSchema);
 
-export default UserModel;
+export default userModel;
