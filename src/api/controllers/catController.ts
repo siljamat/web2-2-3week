@@ -173,19 +173,25 @@ const catGet = async (
 
 // - catListGet - get all cats
 const catListGet = async (
-    req: Request<{}, {}, {}, {limit: string; offset: string}>,
-    res: Response<Cat[]>,
-    next: NextFunction
-    ) => {
-    try {
-        const limit = parseInt(req.query.limit);
-        const offset = parseInt(req.query.offset);
-        const cats = await catModel.find().limit(limit).skip(offset);
-        res.json(cats);
-    } catch (error) {
-        next(error);
-    }
-}
+  req: Request,
+  res: Response<Cat[]>,
+  next: NextFunction
+) => {
+  try {
+    const cats = await catModel
+      .find()
+      .populate({
+        path: 'owner',
+        select: '-__v -password -role',
+      })
+      .populate({
+        path: 'location',
+      });
+    res.json(cats);
+  } catch (err) {
+    next(err);
+  }
+};
 
 // - catPost - create new cat
 const catPost = async (
